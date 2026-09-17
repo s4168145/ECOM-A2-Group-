@@ -1,0 +1,218 @@
+<!-- Shopping cart code , this code will sync the chart and index code so that when someone
+ clicls on the cart icon it will take them to the shopping cart page -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        .cart-container {
+            width: 80%;
+            margin: 0 auto;
+            border: 5px solid #3f3e3e;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .cart-header,
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .cart-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-item img {
+            max-width: 100px;
+        }
+
+        .cart-item p {
+            margin: 0;
+        }
+
+        .cart-item .description {
+            flex: 2;
+            padding: 0 10px;
+        }
+
+        .cart-item .price,
+        .cart-item .qty,
+        .cart-item .total {
+            flex: 1;
+            text-align: center;
+        }
+
+        .cart-item .qty input {
+            width: 50px;
+            text-align: center;
+        }
+
+        .update-btn,
+        .remove-btn {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .payment-section {
+            margin-top: 20px;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+            justify-content: space-between;
+        }
+
+        .payment-option {
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .checkout-btn {
+            display: inline-block;
+            background-color: #c0392b;
+            color: white;
+            padding: 15px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+            float: right;
+        }
+
+        .payment-option img {
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cart-container">
+        <h1>Shopping Cart</h1>
+
+        <p><a href="index.html">&lt;&lt; Continue Shopping</a></p>
+
+        <div class="cart-header">
+            <div>Remove</div>
+            <div>Image</div>
+            <div class="description">Product Description</div>
+            <div class="price">Price</div>
+            <div class="qty">Qty</div>
+            <div class="total">Total</div>
+        </div>
+
+        <!-- Dynamic Cart Container -->
+        <div id="cart-items-list"></div>
+
+        <div style="margin-top: 20px;">
+            <button class="update-btn" onclick="renderCart()">UPDATE QTY</button>
+            <button class="remove-btn" onclick="removeSelected()">REMOVE</button>
+            <span style="float: right; font-size: 20px; font-weight: bold;">
+                Cart Total: $<span id="cart-grand-total">0.00</span>
+            </span>
+        </div>
+
+        <div class="payment-section">
+            <h2>Payment Options</h2>
+            <div class="payment-options">
+                <label class="payment-option"><input type="radio" name="payment" value="visa"><img
+                        src="assets/img/visa.png" alt="Visa"></label>
+                <label class="payment-option"><input type="radio" name="payment" value="mastercard"><img
+                        src="assets/img/mastercard.png" alt="MasterCard"></label>
+                <label class="payment-option"><input type="radio" name="payment" value="paypal"><img
+                        src="assets/img/paypal.png" alt="PayPal"></label>
+                <label class="payment-option"><input type="radio" name="payment" value="amex"><img
+                        src="assets/img/amex.png" alt="Amex"></label>
+                <label class="payment-option"><input type="radio" name="payment" value="alipay"><img
+                        src="assets/img/alipay.png" alt="Alipay"></label>
+                <label class="payment-option"><input type="radio" name="payment" value="gpay"><img
+                        src="assets/img/googlepay.png" alt="Google Pay"></label>
+                <label class="payment-option"><input type="radio" name="payment" value="applepay"><img
+                        src="assets/img/applepay.png" alt="Apple Pay"></label>
+            </div>
+            <a href="billing.html" class="checkout-btn">CHECKOUT NOW &gt;&gt;&gt;</a>
+        </div>
+    </div>
+
+    <script>
+        function renderCart() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let listContainer = document.getElementById('cart-items-list');
+            let grandTotal = 0;
+
+            if (cart.length === 0) {
+                listContainer.innerHTML = '<p style="text-align:center; padding: 20px; font-weight:bold;">Your cart is currently empty.</p>';
+                document.getElementById('cart-grand-total').innerText = '0.00';
+                return;
+            }
+
+            let htmlOutput = '';
+            cart.forEach((item, index) => {
+                let itemTotal = item.price * item.qty;
+                grandTotal += itemTotal;
+
+                htmlOutput += `
+        <div class="cart-item">
+            <div><input type="checkbox" class="remove-check" data-index="${index}"></div>
+            <div><img src="${item.image}" alt="${item.title}"></div>
+            <div class="description">
+                <p><strong>${item.title}</strong></p>
+                <p>${item.specs || ''}</p>
+                <p>Availability: <span style="color:green;">Online</span> <span style="color:blue;">Immediate Pick-up</span></p>
+            </div>
+            <div class="price">$${item.price.toFixed(2)}</div>
+            <div class="qty">
+                <input type="number" value="${item.qty}" min="1" onchange="updateItemQty(${index}, this.value)">
+            </div>
+            <div class="total">$${itemTotal.toFixed(2)}</div>
+        </div>`;
+            });
+
+            listContainer.innerHTML = htmlOutput;
+            document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
+        }
+
+        function updateItemQty(index, newQty) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart[index].qty = Math.max(1, parseInt(newQty) || 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function removeSelected() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let checkboxes = document.querySelectorAll('.remove-check');
+            let updatedCart = cart.filter((item, index) => !checkboxes[index].checked);
+
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            renderCart();
+        }
+
+        window.onload = renderCart;
+    </script>
+
+</body>
+
+</html>
