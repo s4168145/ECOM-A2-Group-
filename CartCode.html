@@ -85,11 +85,11 @@
             border: 1px solid #ddd;
             padding: 8px 15px;
             border-radius: 4px;
-            cursor: pointer;
+            display: inline-block;
         }
 
         .checkout-btn {
-            display: inline-block;
+            display: block;
             background-color: #c0392b;
             color: white;
             padding: 15px 20px;
@@ -102,7 +102,6 @@
         .payment-option img {
             height: 35px;
             vertical-align: middle;
-            margin-right: 5px;
         }
     </style>
 </head>
@@ -145,7 +144,7 @@
                 <div class="payment-option"><img src="assets/img/googlepay.png" alt="Google Pay"></div>
                 <div class="payment-option"><img src="assets/img/applepay.png" alt="Apple Pay"></div>
             </div>
-            <a href="Googlepay/googlepay.html" class="checkout-btn">CHECKOUT NOW &gt;&gt;&gt;</a>
+            <a href="billing.html" class="checkout-btn">CHECKOUT NOW &gt;&gt;&gt;</a>
         </div>
     </div>
 
@@ -204,12 +203,6 @@
         }
 
         window.onload = renderCart;
-    </script>
-    <script>
-    document.querySelector('.checkout-btn').addEventListener('click', function() {
-        const totalValue = document.getElementById('cart-grand-total').innerText;
-        localStorage.setItem('cartTotal', totalValue);
-    });
     </script>
 
 </body>
