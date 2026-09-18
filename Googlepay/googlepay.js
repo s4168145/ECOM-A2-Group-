@@ -198,19 +198,9 @@ function getGooglePaymentDataRequest() {
  */
 //8.3 Part 2
 function getGoogleTransactionInfo() {
-  return {
-    displayItems: [
-      {
-        label: "Subtotal",
-        type: "SUBTOTAL",
-        price: "5.00",
-      },
-      {
-        label: "Tax",
-        type: "TAX",
-        price: "5.00",
-      }
-    ],
+    const storedTotal = localStorage.getItem('cartTotal') || "0.00";
+    return {
+    
     countryCode: 'AU',
     currencyCode: "AUD",
     totalPriceStatus: "FINAL",
