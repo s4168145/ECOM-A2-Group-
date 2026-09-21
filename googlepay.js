@@ -200,11 +200,10 @@ function getGooglePaymentDataRequest() {
 function getGoogleTransactionInfo() {
     const storedTotal = localStorage.getItem('cartTotal') || "0.00";
     return {
-    
     countryCode: 'AU',
     currencyCode: "AUD",
     totalPriceStatus: "FINAL",
-    totalPrice: "5.00",
+    totalPrice: storedTotal,
     totalPriceLabel: "Total"
   };
 }
