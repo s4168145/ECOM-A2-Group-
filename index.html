@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Alice's Electronic Bike Shop</title>
+    <title>Bootstrap E-Commerce Template</title>
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <!-- Fontawesome core CSS -->
@@ -36,7 +36,10 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+
                 <ul class="nav navbar-nav navbar-right">
+                    <!-- Link to cart page with dynamic item counter badge -->
                     <li><a href="CartCode.html">View Cart <span id="cart-count-badge" class="badge">0</span></a></li>
                     <li><a href="#">Track Order</a></li>
                     <li><a href="#">Login</a></li>
@@ -73,9 +76,11 @@
     <div class="container">
 
         <div class="row">
+
             <div class="col-md-9">
                 <div>
                     <ol class="breadcrumb">
+
                         <li class="active">Electric Bikes</li>
                     </ol>
                 </div>
@@ -101,17 +106,17 @@
                     </div>
                 </div>
                 <!-- /.row -->
-
-                <!-- PRODUCT GRID -->
                 <div class="row">
-                    <!-- Bike 1: Bronton -->
                     <div class="col-md-4 text-center col-sm-6 col-xs-6">
                         <div class="thumbnail product-box">
                             <img src="assets/img/bronton.jpg" alt="Bronton Electric Bike" />
                             <div class="caption">
-                                <h3><a href="#">Bronton</a></h3>
-                                <p>Price : <strong>$ 3000</strong></p>
+                                <h3><a href="#">Bronton </a></h3>
+                                <p>Price : <strong>$ 3000</strong> </p>
+
+
                                 <p>
+                                    <!-- Button triggers addToCart function with Bronton bike details -->
                                     <button type="button" class="btn btn-success"
                                         onclick="addToCart('EB1', '[EB1-500W-48V-28MPH] Bronton Electric Bike', 3000, 'assets/img/bronton.jpg', '500W Motor, 48V Battery, Range: 50 miles, Top Speed: 28 mph')">Add
                                         To Cart</button>
@@ -120,15 +125,17 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Bike 2: E-BMX -->
+                    <!-- /.col -->
                     <div class="col-md-4 text-center col-sm-6 col-xs-6">
                         <div class="thumbnail product-box">
                             <img src="assets/img/dummyimg.jpg" alt="E-BMX Electric Bike" />
                             <div class="caption">
-                                <h3><a href="#">E-BMX</a></h3>
-                                <p>Price : <strong>$ 2000</strong></p>
+                                <h3><a href="#">E-BMX </a></h3>
+                                <p>Price : <strong>$ 2000</strong> </p>
+
+
                                 <p>
+                                    <!-- Button triggers addToCart function with E-BMX bike details -->
                                     <button type="button" class="btn btn-success"
                                         onclick="addToCart('EB2', '[EB2-750W-52V-32MPH] E-BMX Electric Bike', 2000, 'assets/img/dummyimg.jpg', '750W Motor, 52V Battery, Range: 60 miles, Top Speed: 32 mph')">Add
                                         To Cart</button>
@@ -137,15 +144,17 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Bike 3: F-65 -->
+                    <!-- /.col -->
                     <div class="col-md-4 text-center col-sm-6 col-xs-6">
                         <div class="thumbnail product-box">
-                            <img src="assets/img/f65.jpg" alt="F-65 Electric Scooter" />
+                            <img src="assets/img/f65.jpg" alt="F-65 Electric Bike" />
                             <div class="caption">
-                                <h3><a href="#">F-65</a></h3>
-                                <p>Price : <strong>$ 700</strong></p>
+                                <h3><a href="#">F-65 </a></h3>
+                                <p>Price : <strong>$ 700</strong> </p>
+
+
                                 <p>
+                                    <!-- Button triggers addToCart function with F-65 bike details -->
                                     <button type="button" class="btn btn-success"
                                         onclick="addToCart('EB3', '[F-65-350W-36V-20MPH] F-65 Electric Bike', 700, 'assets/img/f65.jpg', '350W Motor, 36V Battery, Range: 25 miles, Top Speed: 20 mph')">Add
                                         To Cart</button>
@@ -154,18 +163,27 @@
                             </div>
                         </div>
                     </div>
+                    <!-- /.col -->
                 </div>
                 <!-- /.row -->
 
             </div>
-            <!-- /.col -->
+            <!-- /.row -->
+
         </div>
-        <!-- /.row -->
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
     </div>
     <!-- /.container -->
 
+
     <!--Footer -->
     <div class="col-md-12 footer-box">
+
+
+
+
         <div class="col-md-4">
             <strong>Our Location</strong>
             <hr>
@@ -175,32 +193,50 @@
                 Call: +61-000-000-000<br>
                 Email: info.RiyanShalini@gmail.com<br>
             </p>
+
             2026 www.Riya.Shalini.Bikes.com | All Rights Reserved
         </div>
+
+    </div>
+    <hr>
     </div>
     <!-- /.col -->
-    <div class="col-md-12 end-box">
+    <div class="col-md-12 end-box ">
         &copy; 2026 | &nbsp; All Rights Reserved | &nbsp; www.Riya.Shalini.Bikes.com | &nbsp; 24x7 support | &nbsp;
         Email us: info.RiyanShalini@gmail.com
     </div>
     <!-- /.col -->
     <!--Footer end -->
-
-    <!--Core JavaScript files -->
+    <!--Core JavaScript file  -->
     <script src="assets/js/jquery-1.10.2.js"></script>
+    <!--bootstrap JavaScript file  -->
     <script src="assets/js/bootstrap.js"></script>
+    <!--Slider JavaScript file  -->
     <script src="assets/ItemSlider/js/modernizr.custom.63321.js"></script>
     <script src="assets/ItemSlider/js/jquery.catslider.js"></script>
-
-    <!-- CART SCRIPT -->
     <script>
+        $(function () {
+
+            $('#mi-slider').catslider();
+
+        });
+    </script>
+
+    <!-- Cart functionality JavaScript -->
+    <script>
+        // Adds item details to browser localStorage cart
         function addToCart(id, title, price, image, specs) {
+            // Get existing cart array from localStorage or create an empty array
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Find if item is already added to cart
             let existingIndex = cart.findIndex(item => item.id === id);
 
             if (existingIndex > -1) {
+                // Increment item quantity if it already exists
                 cart[existingIndex].qty += 1;
             } else {
+                // Store new item object into cart array
                 cart.push({
                     id: id,
                     title: title,
@@ -211,20 +247,29 @@
                 });
             }
 
+            // Save updated cart array back to browser localStorage
             localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Refresh navbar badge count and alert user
             updateCartBadge();
             alert("Item added to cart!");
         }
 
+        // Updates total items counter displayed on navbar badge
         function updateCartBadge() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Calculate sum of all item quantities
             let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
             let badge = document.getElementById('cart-count-badge');
+
+            // Render count onto badge element
             if (badge) {
                 badge.innerText = totalQty;
             }
         }
 
+        // Run badge update automatically when page loads
         window.onload = updateCartBadge;
     </script>
 </body>

@@ -5,10 +5,14 @@
 <html lang="en">
 
 <head>
+    <!-- Character set and responsive layout configuration -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
+
+    <!-- Page styling for cart layout, product rows, and controls -->
     <style>
+        /* Main wrapper styling for the shopping cart section */
         .cart-container {
             width: 80%;
             margin: 0 auto;
@@ -17,6 +21,7 @@
             overflow: hidden;
         }
 
+        /* Flexbox structure shared by table headers and individual item rows */
         .cart-header,
         .cart-item {
             display: flex;
@@ -24,30 +29,36 @@
             align-items: center;
         }
 
+        /* Styling for column headings */
         .cart-header {
             border-bottom: 1px solid #ddd;
             padding-bottom: 10px;
             font-weight: bold;
         }
 
+        /* Styling for each product row */
         .cart-item {
             padding: 10px 0;
             border-bottom: 1px solid #ddd;
         }
 
+        /* Product image sizing constraints */
         .cart-item img {
             max-width: 100px;
         }
 
+        /* Default margin reset for paragraphs in item rows */
         .cart-item p {
             margin: 0;
         }
 
+        /* Product details column takes up more horizontal space */
         .cart-item .description {
             flex: 2;
             padding: 0 10px;
         }
 
+        /* Uniform width and alignment for numerical columns */
         .cart-item .price,
         .cart-item .qty,
         .cart-item .total {
@@ -55,11 +66,13 @@
             text-align: center;
         }
 
+        /* Input field sizing for item quantities */
         .cart-item .qty input {
             width: 50px;
             text-align: center;
         }
 
+        /* Action buttons for updating and removing items */
         .update-btn,
         .remove-btn {
             background-color: black;
@@ -69,10 +82,12 @@
             cursor: pointer;
         }
 
+        /* Section wrapper for payment options and checkout action */
         .payment-section {
             margin-top: 20px;
         }
 
+        /* Flexbox grid layout for supported payment logos */
         .payment-options {
             display: flex;
             flex-wrap: wrap;
@@ -81,6 +96,7 @@
             justify-content: space-between;
         }
 
+        /* Box container around each individual payment logo */
         .payment-option {
             border: 1px solid #ddd;
             padding: 8px 15px;
@@ -88,6 +104,7 @@
             display: inline-block;
         }
 
+        /* Styling for the main checkout button */
         .checkout-btn {
             display: block;
             background-color: #c0392b;
@@ -99,6 +116,7 @@
             float: right;
         }
 
+        /* Sizing and alignment for payment badge icons */
         .payment-option img {
             height: 35px;
             vertical-align: middle;
@@ -108,11 +126,14 @@
 
 <body>
 
+    <!-- Main Container Wrapper -->
     <div class="cart-container">
         <h1>Shopping Cart</h1>
 
+        <!-- Back link to product listing page -->
         <p><a href="index.html">&lt;&lt; Continue Shopping</a></p>
 
+        <!-- Header row defining table column categories -->
         <div class="cart-header">
             <div>Remove</div>
             <div>Image</div>
@@ -122,9 +143,10 @@
             <div class="total">Total</div>
         </div>
 
-        <!-- Dynamic Cart Container -->
+        <!-- Target container where JavaScript dynamically injects cart items -->
         <div id="cart-items-list"></div>
 
+        <!-- Action controls for bulk cart management and price total summary -->
         <div style="margin-top: 20px;">
             <button class="update-btn" onclick="renderCart()">UPDATE QTY</button>
             <button class="remove-btn" onclick="removeSelected()">REMOVE</button>
@@ -133,6 +155,7 @@
             </span>
         </div>
 
+        <!-- Payment icons display and link to checkout page -->
         <div class="payment-section">
             <h2>Accepted Payment Options</h2>
             <div class="payment-options">
@@ -148,12 +171,16 @@
         </div>
     </div>
 
+    <!-- JavaScript logic handling local storage dynamic rendering and cart operations -->
     <script>
+        // Reads stored cart items from browser localStorage and builds the page HTML
         function renderCart() {
+            // Retrieve cart items or fallback to an empty array
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let listContainer = document.getElementById('cart-items-list');
             let grandTotal = 0;
 
+            // Display message and reset total if no products are in localStorage
             if (cart.length === 0) {
                 listContainer.innerHTML = '<p style="text-align:center; padding: 20px; font-weight:bold;">Your cart is currently empty.</p>';
                 document.getElementById('cart-grand-total').innerText = '0.00';
@@ -161,10 +188,13 @@
             }
 
             let htmlOutput = '';
+
+            // Loop through each product entry in the cart array
             cart.forEach((item, index) => {
                 let itemTotal = item.price * item.qty;
                 grandTotal += itemTotal;
 
+                // Build HTML element markup for each individual cart item
                 htmlOutput += `
         <div class="cart-item">
             <div><input type="checkbox" class="remove-check" data-index="${index}"></div>
@@ -182,26 +212,37 @@
         </div>`;
             });
 
+            // Insert rendered rows into DOM container and display formatted total price
             listContainer.innerHTML = htmlOutput;
             document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
         }
 
+        // Updates quantity of a specific item when user edits number input
         function updateItemQty(index, newQty) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Ensure minimum quantity is always at least 1
             cart[index].qty = Math.max(1, parseInt(newQty) || 1);
+
+            // Save updated state and re-render cart elements
             localStorage.setItem('cart', JSON.stringify(cart));
             renderCart();
         }
 
+        // Filters out items whose removal checkbox is selected
         function removeSelected() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let checkboxes = document.querySelectorAll('.remove-check');
+
+            // Keep items only if their corresponding checkbox is un-checked
             let updatedCart = cart.filter((item, index) => !checkboxes[index].checked);
 
+            // Save updated cart back to localStorage and rebuild UI view
             localStorage.setItem('cart', JSON.stringify(updatedCart));
             renderCart();
         }
 
+        // Automatically execute renderCart function when page finishes loading
         window.onload = renderCart;
     </script>
 
