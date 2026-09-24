@@ -1,15 +1,16 @@
-<?php
+<?php 
 //global variable configuration
 /*
 * PayPal configuration
 */
 // PayPal configuration
-define('PAYPAL_ID', 'sb-bljqm53012069@business.example.com'); //seller email
+define('PAYPAL_ID', 'sb-z67eg53022815@business.example.com'); //seller email
 define('PAYPAL_SANDBOX', TRUE); //TRUE or FALSE
 //redirect page
-define('PAYPAL_RETURN_URL', 'http://localhost/tutorial5-paypal/success.php'); 
-define('PAYPAL_CANCEL_URL', 'http://localhost/tutorial5-paypal/cancel.php'); 
-define('PAYPAL_NOTIFY_URL', 'http://127.0.0.1/tutorial5-paypal/ipn.php');
+define('PAYPAL_RETURN_URL', 'http://localhost/ECOM-A2-Group-/success.php');
+define('PAYPAL_CANCEL_URL', 'http://localhost/ECOM-A2-Group-/Billing%20Page.html');
+define('PAYPAL_NOTIFY_URL', 'http://127.0.0.1/ECOM-A2-Group-/ipn.php');
+ 
 //define currency
 define('PAYPAL_CURRENCY', 'AUD');
 

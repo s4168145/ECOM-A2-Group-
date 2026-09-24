@@ -1,7 +1,7 @@
 <?php
+session_start();   // NEW
 // Include configuration file	
 include 'config.php';	
-include 'data.php';
 
 // If transaction data is available in the URL 
 if(!empty($_GET['item_number']) && !empty($_GET['tx']) 
@@ -13,18 +13,9 @@ if(!empty($_GET['item_number']) && !empty($_GET['tx'])
 		$payment_gross = $_GET['amt']; 
 		$currency_code = $_GET['cc']; 
 		$payment_status = $_GET['st']; 
-		// Get product info from the database 
-		$result = array();
 
-		foreach ($item as $product) {
-			    if ($product['id'] === $item_number) {
-			        $result = $product;
-			        break;
-			    }
-			}
-
-		$product_name = $result['name'];
-		$product_price = $result['price'];
+		// CHANGED: customer name saved by paypal_checkout.php (replaces the data.php product lookup)
+		$customer_name = isset($_SESSION['name']) ? $_SESSION['name'] : '';
 	}
 ?>
 
@@ -49,9 +40,10 @@ if(!empty($_GET['item_number']) && !empty($_GET['tx'])
 	            <p><b>Paid Amount:</b> <?php echo $payment_gross; ?></p>
 	            <p><b>Payment Status:</b> <?php echo $payment_status; ?></p>
 				
-	            <h4>Product Information</h4>
-	            <p><b>Name:</b> <?php echo $product_name; ?></p>
-	            <p><b>Price:</b> <?php echo $product_price; ?></p>
+	            <!-- CHANGED: order info instead of one product -->
+	            <h4>Order Information</h4>
+	            <p><b>Name:</b> <?php echo $customer_name; ?></p>
+	            <p><b>Order:</b> Alice's Electronic Bike Shop Order</p>
 	        <?php 
 	        }else{ 
 	        ?>
@@ -60,7 +52,7 @@ if(!empty($_GET['item_number']) && !empty($_GET['tx'])
 	        } 
 	        ?>
 	    </div>
-	    <a href="index.php" class="btn-link">Back to Products</a>
+	    <a href="index.html" class="btn-link">Back to Products</a>   <!-- CHANGED -->
 	</div>
 </body>
-</html>
+</html> 

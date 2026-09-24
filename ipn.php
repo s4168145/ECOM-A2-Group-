@@ -1,4 +1,4 @@
-<?php 
+<?php  
 //Page from paypal to verify buyer and seller
 // Include configuration file 
 include_once 'config.php'; 
@@ -16,6 +16,7 @@ foreach ($raw_post_array as $keyval) {
 }
 // read the IPN message sent from PayPal and prepend 'cmd=_notify-validate'
 $req = 'cmd=_notify-validate';
+$get_magic_quotes_exists = false;   // NEW: stops an "undefined variable" warning on PHP 8
 if (function_exists('get_magic_quotes_gpc')) {
   $get_magic_quotes_exists = true;
 }

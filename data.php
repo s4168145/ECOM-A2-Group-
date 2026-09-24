@@ -1,8 +1,11 @@
-<?php
-// Dummy Data
+<?php 
+// Product data - CHANGED from laptops to Alice's bikes.
+// The server uses these prices to calculate the total, so a user
+// can't lower the price by editing localStorage in the browser.
+// ids MUST match the ids used in addToCart() in index.html
 $item = array(
-        array('id' => '1','name' => 'Laptop 1','price' => 1, 'image' => 'images/laptop1.jpg'),
-        array('id' => '2','name' => 'Laptop 2','price' => 2, 'image' => 'images/laptop2.jpg'),
-        array('id' => '3','name' => 'Laptop 3','price' => 3, 'image' => 'images/laptop3.jpg'),
+        array('id' => 'EB1', 'name' => 'Bronton Electric Bike', 'price' => 3000),
+        array('id' => 'EB2', 'name' => 'E-BMX Electric Bike',   'price' => 2000),
+        array('id' => 'EB3', 'name' => 'F-65 Electric Bike',    'price' => 700),
         );
-?>
+?> 
