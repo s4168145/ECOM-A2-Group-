@@ -60,6 +60,7 @@ const form = document.getElementById("visa-payment-form");
 if (form) {
   form.addEventListener("submit", function (event) {
     event.preventDefault();
+    if (!billingValid()) return;   // NEW: stop here if billing isn't filled in
 
     // Sending the card details straight to Stripe (not my own server)
     // to get back a safe "token" (paymentMethod) that represents the card
@@ -83,4 +84,4 @@ function stripePaymentMethodHandler(result) {
     console.log("Received Stripe PaymentMethod:", result.paymentMethod);
     alert("Visa payment validated successfully (test mode)! Amount: $" + totalValue);
   }
-}
+} 

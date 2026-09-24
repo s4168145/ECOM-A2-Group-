@@ -1,7 +1,4 @@
-<!-- Shopping cart code , this code will sync the chart and index code so that when someone
- clicls on the cart icon it will take them to the shopping cart page -->
-
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 
 <head>
@@ -203,6 +200,12 @@
         }
 
         window.onload = renderCart;
+    </script>
+    <script>
+    document.querySelector('.checkout-btn').addEventListener('click', function() {
+        const totalValue = document.getElementById('cart-grand-total').innerText;
+        localStorage.setItem('cartTotal', totalValue);
+    });
     </script>
 
 </body>

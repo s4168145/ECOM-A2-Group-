@@ -1,4 +1,4 @@
-/**
+/** 
  * Define the version of the Google Pay API referenced when creating your
  * configuration
  *
