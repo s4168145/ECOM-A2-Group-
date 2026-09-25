@@ -96,7 +96,7 @@ $requestBody = [
 // Set up a cURL request to call Square's API
 $ch = curl_init(SQUARE_API_URL);
 
-curl_setopt($ch, CURLOPT_POST, true);              // we are POSTing
+curl_setopt($ch, CURLOPT_POST, true);              
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);    // return the response as a string
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Square-Version: ' . SQUARE_API_VERSION,       // Square API version
