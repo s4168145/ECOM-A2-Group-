@@ -1,11 +1,11 @@
 <?php
-session_start();   // NEW: so success.php can show the customer's name
+session_start();   // so success.php can show the customer's name
 // Include configuration file
 include_once "config.php";
 // Include database file
 include_once "data.php";
 
-// NEW: make sure the billing details were filled in
+// make sure the billing details were filled in
 $required = array('first_name', 'last_name', 'username', 'address', 'country', 'zip');
 foreach ($required as $field) {
 	if (empty($_POST[$field])) {
@@ -14,7 +14,7 @@ foreach ($required as $field) {
 	}
 }
 
-// NEW: work out the total using the prices in data.php
+// work out the total using the prices in data.php
 $cart = json_decode($_POST['cart'], true);
 $total = 0;
 if (!empty($cart)) {
@@ -32,7 +32,7 @@ if ($total <= 0) {
 	exit;
 }
 
-// NEW: save the customer's name for success.php
+// save the customer's name for success.php
 $_SESSION['name'] = $_POST['first_name'] . ' ' . $_POST['last_name'];
 ?>
 
