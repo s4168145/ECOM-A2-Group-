@@ -3,6 +3,10 @@ session_start();   // NEW
 // Include configuration file	
 include 'config.php';	
 
+// NEW: Square payments arrive here as success.php?method=square,
+// with the payment details already saved in the session by square-process.php
+$is_square = isset($_GET['method']) && $_GET['method'] === 'square' && !empty($_SESSION['square_payment']);
+
 // If transaction data is available in the URL 
 if(!empty($_GET['item_number']) && !empty($_GET['tx']) 
 && !empty($_GET['amt']) && !empty($_GET['cc']) 
@@ -31,7 +35,22 @@ if(!empty($_GET['item_number']) && !empty($_GET['tx'])
 	<div class="container">
 	    <div class="status">
 	        <?php
-	        if(!empty($txn_id)){ 
+	        if ($is_square) {
+	            $sq = $_SESSION['square_payment'];
+	        ?>
+	            <h1 class="success">Your Payment has been Successful</h1>
+
+	            <h4>Payment Information</h4>
+	            <p><b>Payment Method:</b> Mastercard (Square)</p>
+	            <p><b>Transaction ID:</b> <?php echo htmlspecialchars($sq['id']); ?></p>
+	            <p><b>Paid Amount:</b> $<?php echo number_format($sq['amount'], 2); ?> <?php echo PAYPAL_CURRENCY; ?></p>
+	            <p><b>Payment Status:</b> <?php echo htmlspecialchars($sq['status']); ?></p>
+
+	            <h4>Order Information</h4>
+	            <p><b>Order:</b> Alice's Electronic Bike Shop Order</p>
+	        <?php
+	            unset($_SESSION['square_payment']); // NEW: clear it so refreshing this page doesn't reshow it
+	        } else if(!empty($txn_id)){ 
 	        ?>
 	            <h1 class="success">Your Payment has been Successful</h1>
 				
@@ -55,4 +74,4 @@ if(!empty($_GET['item_number']) && !empty($_GET['tx'])
 	    <a href="index.html" class="btn-link">Back to Products</a>   <!-- CHANGED -->
 	</div>
 </body>
-</html> 
+</html>

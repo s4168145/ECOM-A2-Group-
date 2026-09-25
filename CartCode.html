@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
+
+    <!-- CSS styles to handle the layout, grid alignments, and button styling for the cart -->
     <style>
+        /* Main box holding the entire shopping cart section */
         .cart-container {
             width: 80%;
             margin: 0 auto;
@@ -14,6 +17,7 @@
             overflow: hidden;
         }
 
+        /* Flex layout to align items nicely side by side */
         .cart-header,
         .cart-item {
             display: flex;
@@ -21,17 +25,20 @@
             align-items: center;
         }
 
+        /* Header row formatting for columns (Image, Price, Qty, Total) */
         .cart-header {
             border-bottom: 1px solid #ddd;
             padding-bottom: 10px;
             font-weight: bold;
         }
 
+        /* Single cart row styling */
         .cart-item {
             padding: 10px 0;
             border-bottom: 1px solid #ddd;
         }
 
+        /* Keep bike images small and uniform */
         .cart-item img {
             max-width: 100px;
         }
@@ -40,11 +47,13 @@
             margin: 0;
         }
 
+        /* Gives description section more room compared to price/qty columns */
         .cart-item .description {
             flex: 2;
             padding: 0 10px;
         }
 
+        /* Center aligns table content columns */
         .cart-item .price,
         .cart-item .qty,
         .cart-item .total {
@@ -52,11 +61,13 @@
             text-align: center;
         }
 
+        /* Sizing for quantity input field */
         .cart-item .qty input {
             width: 50px;
             text-align: center;
         }
 
+        /* Black buttons style for update/remove actions */
         .update-btn,
         .remove-btn {
             background-color: black;
@@ -70,6 +81,7 @@
             margin-top: 20px;
         }
 
+        /* Layout for payment logos grid */
         .payment-options {
             display: flex;
             flex-wrap: wrap;
@@ -85,6 +97,7 @@
             display: inline-block;
         }
 
+        /* Red checkout button floating on the right side */
         .checkout-btn {
             display: block;
             background-color: #c0392b;
@@ -108,8 +121,10 @@
     <div class="cart-container">
         <h1>Shopping Cart</h1>
 
+        <!-- Back to bikes page link -->
         <p><a href="index.html">&lt;&lt; Continue Shopping</a></p>
 
+        <!-- Column titles for the cart page layout -->
         <div class="cart-header">
             <div>Remove</div>
             <div>Image</div>
@@ -119,9 +134,10 @@
             <div class="total">Total</div>
         </div>
 
-        <!-- Dynamic Cart Container -->
+        <!-- Dynamic container where JavaScript renders all bikes added to cart -->
         <div id="cart-items-list"></div>
 
+        <!-- Controls for updating quantities, removing items, and grand total -->
         <div style="margin-top: 20px;">
             <button class="update-btn" onclick="renderCart()">UPDATE QTY</button>
             <button class="remove-btn" onclick="removeSelected()">REMOVE</button>
@@ -130,6 +146,7 @@
             </span>
         </div>
 
+        <!-- Display section for accepted payment options -->
         <div class="payment-section">
             <h2>Accepted Payment Options</h2>
             <div class="payment-options">
@@ -141,16 +158,20 @@
                 <div class="payment-option"><img src="assets/img/googlepay.png" alt="Google Pay"></div>
                 <div class="payment-option"><img src="assets/img/applepay.png" alt="Apple Pay"></div>
             </div>
+            <!-- Link to billing/checkout page -->
             <a href="Billing Page 1.html" class="checkout-btn">CHECKOUT NOW &gt;&gt;&gt;</a>
         </div>
     </div>
 
     <script>
+        // Function to grab items from browser storage and render them on page
         function renderCart() {
+            // Get saved items from local storage, or make empty list if none
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let listContainer = document.getElementById('cart-items-list');
             let grandTotal = 0;
 
+            // Message to show if user has no bikes in cart
             if (cart.length === 0) {
                 listContainer.innerHTML = '<p style="text-align:center; padding: 20px; font-weight:bold;">Your cart is currently empty.</p>';
                 document.getElementById('cart-grand-total').innerText = '0.00';
@@ -158,10 +179,13 @@
             }
 
             let htmlOutput = '';
+
+            // Loop through each saved bike in cart and generate HTML row
             cart.forEach((item, index) => {
                 let itemTotal = item.price * item.qty;
-                grandTotal += itemTotal;
+                grandTotal += itemTotal; // Add up total overall price
 
+                // HTML structure for each individual bike item in cart
                 htmlOutput += `
         <div class="cart-item">
             <div><input type="checkbox" class="remove-check" data-index="${index}"></div>
@@ -179,35 +203,46 @@
         </div>`;
             });
 
+            // Put dynamic items onto page and update final price tag
             listContainer.innerHTML = htmlOutput;
             document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
         }
 
+        // Function to change quantity when user types a new number
         function updateItemQty(index, newQty) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            // Prevents item quantity from dropping below 1
             cart[index].qty = Math.max(1, parseInt(newQty) || 1);
+            // Save updated array back into browser storage and re-render screen
             localStorage.setItem('cart', JSON.stringify(cart));
             renderCart();
         }
 
+        // Function to delete checked items from cart
         function removeSelected() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let checkboxes = document.querySelectorAll('.remove-check');
+
+            // Keep items that are NOT checked for removal
             let updatedCart = cart.filter((item, index) => !checkboxes[index].checked);
 
+            // Update storage and refresh display
             localStorage.setItem('cart', JSON.stringify(updatedCart));
             renderCart();
         }
 
+        // Run render function automatically as soon as page finishes loading
         window.onload = renderCart;
     </script>
+
     <script>
-    document.querySelector('.checkout-btn').addEventListener('click', function() {
-        const totalValue = document.getElementById('cart-grand-total').innerText;
-        localStorage.setItem('cartTotal', totalValue);
-    });
+        // Saves final grand total to local storage right before jumping to checkout page
+        document.querySelector('.checkout-btn').addEventListener('click', function () {
+            const totalValue = document.getElementById('cart-grand-total').innerText;
+            localStorage.setItem('cartTotal', totalValue);
+        });
     </script>
 
 </body>
 
-</html> 
+</html>
