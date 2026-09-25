@@ -8,7 +8,7 @@ define('PAYPAL_ID', 'sb-z67eg53022815@business.example.com'); //seller email
 define('PAYPAL_SANDBOX', TRUE); //TRUE or FALSE
 //redirect page
 define('PAYPAL_RETURN_URL', 'http://localhost:8080/ECOM-A2-Group-/success.php');
-define('PAYPAL_CANCEL_URL', 'http://localhost:8080/ECOM-A2-Group-/Billing%20Page.html');
+define('PAYPAL_CANCEL_URL', 'http://localhost:8080/ECOM-A2-Group-/Billing%20Page%201.html');
 define('PAYPAL_NOTIFY_URL', 'http://127.0.0.1:8080/ECOM-A2-Group-/ipn.php');
 //define currency
 define('PAYPAL_CURRENCY', 'AUD');
