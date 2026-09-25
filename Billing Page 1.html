@@ -124,6 +124,25 @@
             font-weight: 700;
             cursor: pointer;
         }
+
+        /* NEW: Mastercard/Square container - hidden until the Mastercard radio is selected */
+        #mastercard-payment-container {
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* NEW: Square's Pay button, matching the other gateways' button styling */
+        #square-pay-button {
+            background-color: #000000;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
  
         /* NEW: red error box when paypal_checkout.php sends the user back */
         #billing-error {
@@ -301,6 +320,14 @@
                 <div id="paypal-container">
                     <button type="submit" id="paypal-btn" form="billingForm">Pay with PayPal</button>
                 </div>
+
+                <!-- NEW: Mastercard payment form, powered by Square. Hidden until the
+                     Mastercard radio is selected. Same shape as the Visa container above. -->
+                <div id="mastercard-payment-container">
+                    <div id="square-card-container"></div>
+                    <div id="square-card-errors" role="alert" style="color: #fa755a; margin-top: 8px; font-size: 14px;"></div>
+                    <button type="button" id="square-pay-button">Pay with Mastercard</button>
+                </div>
             </div>
  
         </div>
@@ -342,13 +369,18 @@
                 const gpayContainer = document.getElementById('google-pay-container');
                 const visaContainer = document.getElementById('visa-payment-container');
                 const paypalContainer = document.getElementById('paypal-container'); // NEW
+                const mastercardContainer = document.getElementById('mastercard-payment-container'); // NEW
  
                 gpayContainer.style.display = (this.value === 'gpay') ? 'block' : 'none';
                 visaContainer.style.display = (this.value === 'visa') ? 'block' : 'none';
                 paypalContainer.style.display = (this.value === 'paypal') ? 'block' : 'none'; // NEW
+                mastercardContainer.style.display = (this.value === 'mastercard') ? 'block' : 'none'; // NEW
  
                 if (this.value === 'visa') {
                     mountStripeCard();
+                }
+                if (this.value === 'mastercard') {
+                    mountSquareCard(); // NEW
                 }
             });
         });
@@ -383,6 +415,10 @@
     </script>
     <script src="https://js.stripe.com/v3/"></script>
     <script src="stripepay.js"></script>
+
+    <!-- NEW: Square Web Payments SDK + our own squarepay.js, mirroring how Stripe is loaded above -->
+    <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+    <script src="squarepay.js"></script>
 </body>
  
 </html>
