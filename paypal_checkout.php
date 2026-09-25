@@ -9,7 +9,7 @@ include_once "data.php";
 $required = array('first_name', 'last_name', 'username', 'address', 'country', 'zip');
 foreach ($required as $field) {
 	if (empty($_POST[$field])) {
-		header('Location: Billing%20Page.html?error=missing');
+		header('Location: Billing%20Page%201.html?error=missing');
 		exit;
 	}
 }
@@ -28,7 +28,7 @@ if (!empty($cart)) {
 	}
 }
 if ($total <= 0) {
-	header('Location: Billing%20Page.html?error=cart');
+	header('Location: Billing%20Page%201.html?error=cart');
 	exit;
 }
 
