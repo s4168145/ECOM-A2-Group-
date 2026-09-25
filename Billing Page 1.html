@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Information</title>
+    <style>
+        /* Overall box that wraps the whole billing page - centers it and gives it a border */
+        .billing-container {
+            width: 80%;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            display: flow-root;
+        }
+ 
+        /* Splits the page into two side-by-side columns: billing address on the left, payment options on the right */
+        .billing-layout {
+            display: flex;
+            gap: 40px;
+        }
+ 
+        .billing-address,
+        .payment-panel {
+            flex: 1;
+            /* both columns share the space equally */
+        }
+ 
+        /* Styling for each individual form field */
+        .form-group {
+            margin-bottom: 15px;
+        }
+ 
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+ 
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            /* keeps padding from making inputs wider than their container */
+        }
+ 
+        /* Used when I want two or more fields sitting next to each other in one row,
+           like First name + Last name, or Country + State + Zip */
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+ 
+        .form-row .form-group {
+            flex: 1;
+        }
+ 
+        /* The list of payment method options (Visa, MasterCard, PayPal, etc.) -
+           stacked vertically underneath each other */
+        .payment-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+            flex-direction: column
+        }
+ 
+        /* Each individual payment option box (the bordered rectangle with the logo inside) */
+        .payment-option {
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+ 
+        .payment-option img {
+            height: 35px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+ 
+        /* Google Pay's button gets inserted into this div by googlepay.js -
+           hidden by default, only shows when the Google Pay radio is selected */
+        #google-pay-container {
+            margin-top: 15px;
+            display: none;
+        }
+ 
+        /* Visa payment form (card number, expiry, CVC) -
+        hidden by default, only shows when the Visa radio is selected */
+        #visa-payment-form button[type="submit"] {
+            background-color: #635bff;
+            /* Stripe's own brand purple */
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+ 
+        #visa-payment-form button[type="submit"]:hover {
+            background-color: #4d44db;
+            /* slightly darker shade when hovering */
+        }
+                /* NEW: PayPal container - hidden until the PayPal radio is selected */
+        #paypal-container {
+            margin-top: 15px;
+            display: none;
+        }
+ 
+        /* NEW: PayPal button in PayPal's yellow */
+        #paypal-btn {
+            background-color: #ffc439;
+            color: #003087;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+ 
+        /* NEW: red error box when paypal_checkout.php sends the user back */
+        #billing-error {
+            display: none;
+            color: #a94442;
+            background: #f2dede;
+            border: 1px solid #ebccd1;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+ 
+<body>
+ 
+    <div class="billing-container">
+        <h1>Provide Billing Information</h1>
+        <div class="billing-layout">
+ 
+            <!-- LEFT COLUMN: standard billing address form fields -->
+                        <!-- CHANGED: div -> form so the browser enforces 'required' and sends the details to PHP -->
+            <form id="billingForm" class="billing-address" action="paypal_checkout.php" method="POST">
+                <h2>Billing address</h2>
+ 
+                <!-- NEW: error message if the server sends the user back -->
+                <div id="billing-error"></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First name</label>
+                        <input type="text" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last name</label>
+                        <input type="text" name="last_name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" placeholder="@ Username" required>
+                </div>
+                <div class="form-group">
+                    <label>Email (Optional)</label>
+                    <input type="email" name="email" placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" name="address" placeholder="1234 Main St" required>
+                </div>
+                <div class="form-group">
+                    <label>Address 2 (Optional)</label>
+                    <input type="text" name="address2" placeholder="Apartment or suite">
+                </div>
+                <!-- Country dropdown triggers updateStates() below, which fills in the matching State dropdown -->
+ 
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Country</label>
+                        <select id="country-select" name="country" onchange="updateStates()" required>
+                            <option value="">Choose...</option>
+                            <option value="AU">Australia</option>
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="NZ">New Zealand</option>
+                            <option value="AT">Austria</option>
+                            <option value="BE">Belgium</option>
+                            <option value="BR">Brazil</option>
+                            <option value="BG">Bulgaria</option>
+                            <option value="CN">China</option>
+                            <option value="HR">Croatia</option>
+                            <option value="CY">Cyprus</option>
+                            <option value="CZ">Czech Republic</option>
+                            <option value="DK">Denmark</option>
+                            <option value="EE">Estonia</option>
+                            <option value="FI">Finland</option>
+                            <option value="FR">France</option>
+                            <option value="DE">Germany</option>
+                            <option value="GR">Greece</option>
+                            <option value="HK">Hong Kong</option>
+                            <option value="HU">Hungary</option>
+                            <option value="IN">India</option>
+                            <option value="ID">Indonesia</option>
+                            <option value="IE">Ireland</option>
+                            <option value="IL">Israel</option>
+                            <option value="IT">Italy</option>
+                            <option value="JP">Japan</option>
+                            <option value="LV">Latvia</option>
+                            <option value="LT">Lithuania</option>
+                            <option value="LU">Luxembourg</option>
+                            <option value="MY">Malaysia</option>
+                            <option value="MT">Malta</option>
+                            <option value="MX">Mexico</option>
+                            <option value="NL">Netherlands</option>
+                            <option value="NO">Norway</option>
+                            <option value="PH">Philippines</option>
+                            <option value="PL">Poland</option>
+                            <option value="PT">Portugal</option>
+                            <option value="RO">Romania</option>
+                            <option value="SG">Singapore</option>
+                            <option value="SK">Slovakia</option>
+                            <option value="SI">Slovenia</option>
+                            <option value="ZA">South Africa</option>
+                            <option value="KR">South Korea</option>
+                            <option value="ES">Spain</option>
+                            <option value="SE">Sweden</option>
+                            <option value="CH">Switzerland</option>
+                            <option value="TW">Taiwan</option>
+                            <option value="TH">Thailand</option>
+                            <option value="TR">Turkey</option>
+                            <option value="AE">United Arab Emirates</option>
+                            <option value="VN">Vietnam</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>State</label>
+                        <select id="state-select" name="state">
+                            <option value="">Choose...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Zip</label>
+                        <input type="text" name="zip" required>
+                    </div>
+                </div>
+ 
+                            <!-- NEW: JS fills this with the cart's product ids + quantities -->
+                <input type="hidden" name="cart" id="cart-field">
+            </form>
+ 
+            <div class="payment-panel">
+                <h2>Select A Payment Option</h2>
+                <div class="payment-options">
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="visa">
+                        <img src="assets/img/visa.png" alt="Visa">
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="mastercard">
+                        <img src="assets/img/mastercard.png" alt="MasterCard">
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="paypal">
+                        <img src="assets/img/paypal.png" alt="PayPal">
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="amex">
+                        <img src="assets/img/amex.png" alt="Amex">
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="alipay">
+                        <img src="assets/img/alipay.png" alt="Alipay">
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="gpay">
+                        <img src="assets/img/googlepay.png" alt="Google Pay">
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="applepay">
+                        <img src="assets/img/applepay.png" alt="Apple Pay">
+                    </label>
+                </div>
+ 
+                <div id="google-pay-container"></div>
+ 
+                <div id="visa-payment-container" style="display:none; margin-top: 15px;">
+                    <form id="visa-payment-form">
+                        <div id="card-element"></div>
+                        <div id="card-errors" role="alert" style="color: #fa755a; margin-top: 8px; font-size: 14px;">
+                        </div>
+                        <button type="submit" class="continue-btn" style="margin-top: 10px;">Pay with Visa</button>
+                    </form>
+                </div>
+                                <!-- NEW: form="billingForm" makes this button submit the billing form on the left.
+                     The browser blocks it if any required field is empty. -->
+                <div id="paypal-container">
+                    <button type="submit" id="paypal-btn" form="billingForm">Pay with PayPal</button>
+                </div>
+            </div>
+ 
+        </div>
+    </div>
+ 
+    <script src="googlepay.js"></script>
+    <script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
+        <script>
+                    // NEW: checks every 'required' billing field; shows the browser's
+        // "Please fill out this field" popup on the first empty one
+        function billingValid() {
+            const billingForm = document.getElementById('billingForm');
+            if (!billingForm.checkValidity()) {
+                billingForm.reportValidity();
+                return false;
+            }
+            return true;
+        }
+        // NEW: put the cart's product ids + quantities into the hidden field
+        const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+        document.getElementById('cart-field').value = JSON.stringify(
+            savedCart.map(function (i) { return { id: i.id, qty: i.qty }; })
+        );
+ 
+        // NEW: show a message if paypal_checkout.php sent us back
+        const errorMessages = {
+            missing: 'Please complete all required billing fields before paying.',
+            cart: 'Your cart is empty. Please go back to the cart.'
+        };
+        const errorCode = new URLSearchParams(window.location.search).get('error');
+        if (errorMessages[errorCode]) {
+            const box = document.getElementById('billing-error');
+            box.textContent = errorMessages[errorCode];
+            box.style.display = 'block';
+        }
+ 
+        document.querySelectorAll('input[name="payment"]').forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                const gpayContainer = document.getElementById('google-pay-container');
+                const visaContainer = document.getElementById('visa-payment-container');
+                const paypalContainer = document.getElementById('paypal-container'); // NEW
+ 
+                gpayContainer.style.display = (this.value === 'gpay') ? 'block' : 'none';
+                visaContainer.style.display = (this.value === 'visa') ? 'block' : 'none';
+                paypalContainer.style.display = (this.value === 'paypal') ? 'block' : 'none'; // NEW
+ 
+                if (this.value === 'visa') {
+                    mountStripeCard();
+                }
+            });
+        });
+    </script>
+    <script>
+        const statesByCountry = {
+            AU: ["New South Wales", "Victoria", "Queensland", "Western Australia", "South Australia", "Tasmania", "Australian Capital Territory", "Northern Territory"],
+            US: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
+            CA: ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Nova Scotia", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan"]
+        };
+ 
+        function updateStates() {
+            const country = document.getElementById('country-select').value;
+            const stateSelect = document.getElementById('state-select');
+ 
+            stateSelect.innerHTML = '<option value="">Choose...</option>';
+            // NEW: State is only required for countries with a state list (AU/US/CA)
+            stateSelect.required = !!statesByCountry[country];
+ 
+            if (statesByCountry[country]) {
+                statesByCountry[country].forEach(function (state) {
+                    const opt = document.createElement('option');
+                    opt.value = state;
+                    opt.textContent = state;
+                    stateSelect.appendChild(opt);
+                });
+            } else if (country) {
+                // Fallback for countries without a full state list — free text
+                stateSelect.innerHTML = '<option value="">N/A — enter in address field</option>';
+            }
+        }
+    </script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="stripepay.js"></script>
+</body>
+ 
+</html>

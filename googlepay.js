@@ -213,6 +213,7 @@ function getGoogleTransactionInfo() {
  */
 //9. Register an event handler for user gestures
 function onGooglePaymentButtonClicked() {
+  if (!billingValid()) return; 
   const paymentDataRequest = getGooglePaymentDataRequest();
   paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
 
